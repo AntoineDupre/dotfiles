@@ -1,0 +1,66 @@
+# Install i3
+sudo apt install i3 i3-wm i3lock i3status i3blocks
+sydi aot install dmenu-desktop
+# Install neovim
+sudo apt install neovim
+sudo apt install python3-neovim
+sudo apt install python3-venv
+sudo apt install python3-pip
+pip install black
+sudo apt install ctags
+pip install notedown
+
+# Install tmux
+sudo apt install tmux tmux-plugin-manager
+
+
+# Install fnzy finder
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+~/.fzf/install
+
+# Install zsh
+sudo apt install zsh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+sudo apt install zplug
+
+
+# Install termianl kitty:
+curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
+
+# compton
+sudo apt install compton
+
+# dot files i
+liquidpromptrc
+compton
+nvim/init
+nvim/autuload/plug.vim
+i3/i3status
+i3/confid
+zshrc
+
+
+
+cargo install runiq
+cargo install bat
+cargo install ripgrep
+cargo install topgrade
+sudo apt install httpie
+sudo apt-get install jq
+cargo install watchexec
+
+
+TODO
+ - install zshrc + zplug
+ - neovim
+ - ranger
+ - compton
+ - tmux config
+ - i3
+ - fd
+ - ee
+ - glances
+ - conky
+ - feh
+ ...
+
