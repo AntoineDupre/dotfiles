@@ -5,6 +5,7 @@ Xft.rgba: rgb
 Xft.autohint: false
 Xft.hintstyle: hintfull
 Xft.lcdfilter: lcddefault
+Xcursor.size: 16
 
 ! rofi
 rofi.modi: run

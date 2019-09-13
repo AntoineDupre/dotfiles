@@ -51,9 +51,18 @@ setxkbmap fr
 setxkbmap -option ctrl:nocaps
 xmodmap -e 'clear lock'
 xmodmap -e 'keycode 66 = Hyper_L'
-
+xrandr --output DP-5 --rotate left
+xrandr --output DP-3 --rotate left
+xrandr --output DP-3 --mode 1920x1200
+xrandr --output DP-4 --mode 3440x1440
+xrandr --output DP-5 --mode 1920x1200
+xrandr --output DP-4 --right-of DP-3
+xrandr --output DP-5 --right-of DP-4
+# xrandr --output DP-4 --pos 1200x450
+# xrandr --output DP-5 --pos 4640x100
 
 # xterm -geometry 80x50+494+51 &
 # xterm -geometry 80x20+494-0 &
 ## exec xterm -geometry 80x66+0+0 -name login
 exec i3
+# exec dwm

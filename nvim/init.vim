@@ -64,6 +64,11 @@ Plug 'vim-scripts/JavaDecompiler.vim'
 Plug 'hashivim/vim-terraform'
 Plug 'cjrh/vim-conda'
 
+
+" Markdown
+Plug 'JamshedVesuna/vim-markdown-preview'
+Plug 'mzlogin/vim-markdown-toc'
+
 "--------------------------=== Looks ===------------------------
 Plug 'bling/vim-airline'                 " Lean & mean status/tabline for vim
 Plug 'flazz/vim-colorschemes'            " Colorschemes
@@ -157,10 +162,11 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 
 Plug 'nvie/vim-flake8'
-
+Plug 'fisadev/vim-isort'
 " Plug 'neomake/neomake' " Have look and has mypy
 " Plug  'integralist/vim-mypy'
 
+Plug 'joedicastro/vim-molokai256'
 
 call plug#end()
 
@@ -173,7 +179,7 @@ let mapleader = ","     " map leader to ,
 set mouse=a             " make sure mouse is used in all cases.
 set termguicolors       " true color
 " colorscheme gruvbox     " define syntax color scheme
-colorscheme molokai     " define syntax color scheme
+colorscheme molokai256     " define syntax color scheme
 set background=dark
 set shortmess+=I        " disable the welcome screen
 set clipboard+=unnamedplus " yank and copy to X clipboard
@@ -188,8 +194,10 @@ set cmdheight=1         " set the command height
 set showmatch           " show matching brackets (),{},[]
 set matchpairs+=<:>     " match < and > as well
 set mat=5               " show matching brackets for 0.5 seconds
-set scrolloff=2         " keep 2 lines spacing between cursor and edge
+set scrolloff=7         " keep 2 lines spacing between cursor and edge
 set number              " show line numbers
+set relativenumber      " show relative line numbers
+set title               " set the terminal title to the current file
 syntax on               " enable syntax highlighting
 "set synmaxcol=200       " for performance reason, don't highlight long lines
 filetype plugin indent on
@@ -197,8 +205,9 @@ filetype plugin indent on
 map ; :
 
 " cursor settings
-set nocursorline        " don't highlight cursor line (this makes scrolling slow)
+" set nocursorline        " don't highlight cursor line (this makes scrolling slow)
 set nocursorcolumn      " don't highlight cursor column (breaks completion preview)
+set cursorline          " highlight the line under the cursor
 
 " wrap like other editors
 set wrap                " word wrap
@@ -269,6 +278,11 @@ let g:user_emmet_leader_key='<C-E>'
 " vim-better-whitespace
 let g:better_whitespace_filetypes_blacklist=['ctrlsf']
 
+
+" Markdown preview
+let vim_markdown_preview_hotkey='<C-m>'
+let vim_markdown_preview_browser='Firefox'
+let vim_markdown_preview_github=1
 
 " vim-airline
 set laststatus=2
@@ -454,3 +468,6 @@ let g:go_version_warning = 0  "Remove warning
 
 " Rust
 let g:rustfmt_autosave = 1
+
+
+

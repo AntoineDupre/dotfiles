@@ -5,342 +5,363 @@ set $height 24
 # start a terminal
 bindsym $mod+Return exec i3-sensible-terminal
 set $editor termite
+set $TERMINAL termite
 
-##############################################################################
-## FONT
-font pango:monospace 8
-#ont monaco:Regular, FontAwesome 8
-
-
-
-##############################################################################
-## COLORS
-set $darkred #cc241d
-set $black       #282828
-set $white       #ebdbb2
-set $darkwhite   #a89984
-set $darkblack   #1d2021
-set $transparent #00000000
-
-#                       BORDER      BACKGROUND  TEXT        INDICATOR   CHILD_BORDER
-client.focused          $black      $black      $white      $darkblack  $darkblack
-client.unfocused        $black      $black      $darkwhite  $darkblack  $darkblack
-client.focused_inactive $black      $black      $white      $darkblack  $darkblack
-client.urgent           $darkred    $darkred    $black      $darkred    $darkred
-client.background       $black
+ ##############################################################################
+ ## FONT
+ font pango:monospace 8
+ #ont monaco:Regular, FontAwesome 8
 
 
 
-##############################################################################
-## GAP
-set $default_gaps_inner 0
-set $default_gaps_outer 0
-gaps inner $default_gaps_inner
-gaps outer $default_gaps_outer
-smart_gaps on
+ ##############################################################################
+ ## COLORS
+ set $darkred #cc241d
+ set $black       #282828
+ set $white       #ebdbb2
+ set $darkwhite   #a89984
+ set $green        #119911
+ set $blue        #111199
+ set $darkblack   #1d2021
+ set $transparent #00000000
 
-set $mode_gaps gaps
-set $mode_gaps_outer outer gaps
-set $mode_gaps_inner inner gaps
-bindsym $mod+Shift+g mode "$mode_gaps"
-mode "$mode_gaps" {
-    bindsym o      mode "$mode_gaps_outer"
-    bindsym i      mode "$mode_gaps_inner"
-
-    bindsym 0      mode "default", exec --no-startup-id i3-msg "gaps inner current set 0" && i3-msg "gaps outer current set 0"
-    bindsym d      mode "default", exec --no-startup-id i3-msg "gaps inner current set $default_gaps_inner" && i3-msg "gaps outer current set $default_gaps_outer"
-
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-}
-
-mode "$mode_gaps_inner" {
-    bindsym plus  gaps inner current plus 5
-    bindsym minus gaps inner current minus 5
-    bindsym 0     mode "default", gaps inner current set 0
-    bindsym d     mode "default", gaps inner current set $default_gaps_inner
-
-    bindsym Shift+plus  gaps inner all plus 5
-    bindsym Shift+minus gaps inner all minus 5
-    bindsym Shift+0     mode "default", gaps inner all set 0
-    bindsym Shift+d     mode "default", gaps inner all set $default_gaps_inner
-
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-}
-
-mode "$mode_gaps_outer" {
-    bindsym plus  gaps outer current plus 5
-    bindsym minus gaps outer current minus 5
-    bindsym 0     mode "default", gaps outer current set 0
-    bindsym d     mode "default", gaps outer current set $default_gaps_outer
-
-    bindsym Shift+plus  gaps outer all plus 5
-    bindsym Shift+minus gaps outer all minus 5
-    bindsym Shift+0     mode "default", gaps outer all set 0
-    bindsym Shift+d     mode "default", gaps outer all set $default_gaps_outer
-
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-}
+ #                       BORDER      BACKGROUND  TEXT        INDICATOR   CHILD_BORDER
+ client.focused          $green      $black      $white      $darkblack  $darkblack
+ client.focused          $green      $black      $white      $darkblack  $blue
+ # client.focused          $blue      $blue      $blue      $blue  $blue
+ client.unfocused        $black      $black      $darkwhite  $darkblack  $darkblack
+ client.focused_inactive $black      $black      $white      $darkblack  $darkblack
+ client.urgent           $darkred    $darkred    $black      $darkred    $darkred
+ client.background       $black
 
 
 
-##############################################################################
-## MOUSE
-# Use Mouse+$mod to drag floating windows to their wanted position
-floating_modifier $mod
-focus_follows_mouse no
+ ##############################################################################
+ ## GAP
+ set $default_gaps_inner 0
+ set $default_gaps_outer 0
+ gaps inner $default_gaps_inner
+ gaps outer $default_gaps_outer
 
+ smart_gaps on
 
-##############################################################################
-## WINDOWS
-floating_minimum_size -1 x -1
-floating_maximum_size -1 x -1
+ set $mode_gaps gaps
+ set $mode_gaps_outer outer gaps
+ set $mode_gaps_inner inner gaps
+ bindsym $mod+Shift+g mode "$mode_gaps"
+ mode "$mode_gaps" {
+     bindsym o      mode "$mode_gaps_outer"
+     bindsym i      mode "$mode_gaps_inner"
 
-new_window none
+     bindsym 0      mode "default", exec --no-startup-id i3-msg "gaps inner current set 0" && i3-msg "gaps outer current set 0"
+     bindsym d      mode "default", exec --no-startup-id i3-msg "gaps inner current set $default_gaps_inner" && i3-msg "gaps outer current set $default_gaps_outer"
 
-# Resize
-set $mode_resize resize
-bindsym $mod+r mode "$mode_resize"
-mode "$mode_resize" {
-    bindsym Left resize shrink width 10 px or 1 ppt
-    bindsym Down resize grow height 10 px or 1 ppt
-    bindsym Up resize shrink height 10 px or 1 ppt
-    bindsym Right resize grow width 10 px or 1 ppt
+     bindsym Return mode "default"
+     bindsym Escape mode "default"
+ }
 
-    bindsym Shift+Left resize shrink width 20 px or 5 ppt
-    bindsym Shift+Down resize grow height 20 px or 5 ppt
-    bindsym Shift+Up resize shrink height 20 px or 5 ppt
-    bindsym Shift+Right resize grow width 20 px or 5 ppt
+ mode "$mode_gaps_inner" {
+     bindsym plus  gaps inner current plus 5
+     bindsym minus gaps inner current minus 5
+     bindsym 0     mode "default", gaps inner current set 0
+     bindsym d     mode "default", gaps inner current set $default_gaps_inner
 
-    bindsym s mode "default", exec --no-startup-id $HOME/scripts/slopsize.sh
+     bindsym Shift+plus  gaps inner all plus 5
+     bindsym Shift+minus gaps inner all minus 5
+     bindsym Shift+0     mode "default", gaps inner all set 0
+     bindsym Shift+d     mode "default", gaps inner all set $default_gaps_inner
 
-    bindsym 1 mode "default", resize set 1000 600
-    bindsym 2 mode "default", resize set 1500 600
-    bindsym 3 mode "default", resize set 1200 1000
+     bindsym Return mode "default"
+     bindsym Escape mode "default"
+ }
 
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-}
+ mode "$mode_gaps_outer" {
+     bindsym plus  gaps outer current plus 5
+     bindsym minus gaps outer current minus 5
+     bindsym 0     mode "default", gaps outer current set 0
+     bindsym d     mode "default", gaps outer current set $default_gaps_outer
 
-for_window [window_role="pop-up"] floating enable
-for_window [window_role="bubble"] floating enable
-for_window [window_role="task_dialog"] floating enable
-for_window [window_role="Preferences"] floating enable
-for_window [window_type="dialog"] floating enable
-for_window [window_type="menu"] floating enable
+     bindsym Shift+plus  gaps outer all plus 5
+     bindsym Shift+minus gaps outer all minus 5
+     bindsym Shift+0     mode "default", gaps outer all set 0
+     bindsym Shift+d     mode "default", gaps outer all set $default_gaps_outer
 
-
-for_window [class="jive3-MainPanel"] floating enable #    , move position mouse
-for_window [class="(?i)admin-Astor(?i)"] floating enable # , move position mouse
-assign [class="jive3-MainPanel"] $ws1
-assign [class="(?i)admin-Astor(?i)"] $ws1
-# Move window to the next available workspace
-bindsym $mod+Escape exec --no-startup-id ${HOME}/scripts/next-available-workspace.py
-bindsym $mod+p move scratchpad
-bindsym $mod+Shift+p scratchpad show
-
-
-
-##############################################################################
-## WORKSPACE
-workspace_layout stacking
-workspace_auto_back_and_forth no
-force_display_urgency_hint 0 ms
-focus_on_window_activation urgent
-# back and forth
-bindsym $mod+Tab workspace back_and_forth
-bindsym $mod+Shift+Tab exec --no-startup-id ${HOME}/scripts/cycle-workspace.py
-# Define names for default workspaces for which we configure key bindings later on.
-# We use variables to avoid repeating the names in multiple places.
-set $ws1  "1: Default"
-set $ws2  "2: Vim"
-set $ws3  "3: Term"
-set $ws4  "4: Browser"
-set $ws5  "5: 5"
-set $ws6  "6: 6"
-set $ws7  "7: 7"
-set $ws8  "8: 8"
-set $ws9  "9: 9"
-set $ws10 "10: 0"
-
-
-# Screens
-workspace $ws1 output DP-3
-workspace $ws2 output DP-4
-workspace $ws3 output DP-4
-workspace $ws4 output DP-6
-
-# Assignment
-assign [class="Firefox"] $ws4
-
-# switch to workspace
-bindsym $mod+1 workspace $ws1
-bindsym $mod+2 workspace $ws2
-bindsym $mod+3 workspace $ws3
-bindsym $mod+4 workspace $ws4
-bindsym $mod+5 workspace $ws5
-bindsym $mod+6 workspace $ws6
-bindsym $mod+7 workspace $ws7
-bindsym $mod+8 workspace $ws8
-bindsym $mod+9 workspace $ws9
-bindsym $mod+0 workspace $ws10
-
-# move focused container to workspace
-bindsym $mod+Shift+1 move container to workspace $ws1
-bindsym $mod+Shift+2 move container to workspace $ws2
-bindsym $mod+Shift+3 move container to workspace $ws3
-bindsym $mod+Shift+4 move container to workspace $ws4
-bindsym $mod+Shift+5 move container to workspace $ws5
-bindsym $mod+Shift+6 move container to workspace $ws6
-bindsym $mod+Shift+7 move container to workspace $ws7
-bindsym $mod+Shift+8 move container to workspace $ws8
-bindsym $mod+Shift+9 move container to workspace $ws9
-bindsym $mod+Shift+0 move container to workspace $ws10
-
-
-##############################################################################
-## MENU
-bindsym $mod+d exec --no-startup-id rofi -show run
-bindsym $mod+Shift+d exec --no-startup-id rofi -show drun
-bindsym $mod+q exec --no-startup-id rofi -show ssh
-bindsym $mod+z exec --no-startup-id rofi -show window
-
-
-
-##############################################################################
-## KEYS
-# kill focused window
-bindsym $mod+Shift+q kill
-
-
-# change focus
-bindsym $mod+j focus left
-bindsym $mod+k focus down
-bindsym $mod+l focus up
-bindsym $mod+semicolon focus right
-
-# alternatively, you can use the cursor keys:
-bindsym $mod+Left focus left
-bindsym $mod+Down focus down
-bindsym $mod+Up focus up
-bindsym $mod+Right focus right
-
-# move focused window
-bindsym $mod+Shift+j move left
-bindsym $mod+Shift+k move down
-bindsym $mod+Shift+l move up
-bindsym $mod+Shift+semicolon move right
-
-# alternatively, you can use the cursor keys:
-bindsym $mod+Shift+Left move left
-bindsym $mod+Shift+Down move down
-bindsym $mod+Shift+Up move up
-bindsym $mod+Shift+Right move right
-
-# split in horizontal orientation
-bindsym $mod+h split h
-
-# split in vertical orientation
-bindsym $mod+v split v
-
-# enter fullscreen mode for the focused container
-bindsym $mod+f fullscreen toggle
-
-# change container layout (stacked, tabbed, toggle split)
-bindsym $mod+s layout stacking
-bindsym $mod+w layout tabbed
-bindsym $mod+e layout toggle split
-
-# toggle tiling / floating
-bindsym $mod+Shift+space floating toggle
-
-# change focus between tiling / floating windows
-bindsym $mod+space focus mode_toggle
-
-# focus the parent container
-bindsym $mod+a focus parent
-
-# focus the child container
-bindsym $mod+Shift+a focus child
-#bindsym $mod+d focus child
-
-# reload the configuration file
-bindsym $mod+Shift+c reload
-# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
-bindsym $mod+Shift+r restart
-# exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
-
-##############################################################################
-## BAR
-
-# Start i3bar to display a workspace bar (plus the system information i3status
-# finds out, if available)
-# bar {
-#         status_command i3status -c $HOME/.config/i3/i3status
-#         position top
-#         tray_output  DP-3
-#         # output  DP-6
-# }
- bar {
- #    verbose yes
-     status_command i3blocks
-     i3bar_command i3bar -t
-     position top
-     font monaco:Regular, FontAwesome 8
-     strip_workspace_numbers yes
-     separator_symbol "■"
-     bindsym button4 nop
-     bindsym button5 nop
-       tray_output  DP-3
-     height $height
-     colors {
-         statusline         $white
-         background         $transparent
-         separator          $transparent
-
- #                          BORDER       BACKGROUND   TEXT
-         focused_workspace  $transparent $transparent $white
-         inactive_workspace $transparent $transparent $darkwhite
-         active_workspace   $transparent $transparent $darkwhite
-         urgent_workspace   $darkred     $darkred     $transparent
-         binding_mode       $darkred     $darkred     $transparent
-     }
+     bindsym Return mode "default"
+     bindsym Escape mode "default"
  }
 
 
-##############################################################################
-## MODES
-set $mode_power power
-bindsym Mod1+Control+l mode "$mode_power"
-mode "$mode_power" {
-    bindsym l mode "default", exec --no-startup-id $HOME/scripts/i3exit lock
-    bindsym e mode "default", exec --no-startup-id $HOME/scripts/i3exit logout
-    bindsym s mode "default", exec --no-startup-id $HOME/scripts/i3exit suspend
-    bindsym h mode "default", exec --no-startup-id $HOME/scripts/i3exit hibernate
-    bindsym r mode "default", exec --no-startup-id $HOME/scripts/i3exit reboot
-    bindsym p mode "default", exec --no-startup-id $HOME/scripts/i3exit shutdown
+ ##############################################################################
+ ## Volume
+ bindsym XF86AudioLowerVolume exec --no-startup-id pamixer -d 5
+ bindsym XF86AudioRaiseVolume exec --no-startup-id pamixer -i 5
+ bindsym XF86AudioMute exec --no-startup-id pamixer -t
 
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-}
+ ##############################################################################
+ ## MOUSE
+ # Use Mouse+$mod to drag floating windows to their wanted position
+ floating_modifier $mod
+ focus_follows_mouse no
 
 
+ ##############################################################################
+ ## WINDOWS
+ floating_minimum_size -1 x -1
+ floating_maximum_size -1 x -1
 
-##############################################################################
-## STARTUP
+# new_window none
+# default_border normal  5
 
-# exec_always --no-startup-id feh --bg-fill $HOME/Pictures/ws_Arch_Linux_1920x1200.jpg
-# exec_always --no-startup-id feh --bg-fill $HOME/Pictures/ws_Arch_Linux_1920x1200.jpg
-exec_always --no-startup-id feh --bg-fill $HOME/Pictures/wp2618284.jpg
-# exec --no-startup-id compton -b
-exec --no-startup-id nm-applet &
-exec --no-startup-id parcellite -b
-exec --no-startup-id dunst &
-# Conky
-exec --no-startup-id /bin/sh /home/antdup/scripts/start_conky.sh
-# Todo look at plasma applet
-#
+ # Resize
+ set $mode_resize resize
+ bindsym $mod+r mode "$mode_resize"
+ mode "$mode_resize" {
+     bindsym Left resize shrink width 10 px or 1 ppt
+     bindsym Down resize grow height 10 px or 1 ppt
+     bindsym Up resize shrink height 10 px or 1 ppt
+     bindsym Right resize grow width 10 px or 1 ppt
+
+     bindsym Shift+Left resize shrink width 20 px or 5 ppt
+     bindsym Shift+Down resize grow height 20 px or 5 ppt
+     bindsym Shift+Up resize shrink height 20 px or 5 ppt
+     bindsym Shift+Right resize grow width 20 px or 5 ppt
+
+     bindsym s mode "default", exec --no-startup-id $HOME/scripts/slopsize.sh
+
+     bindsym 1 mode "default", resize set 1000 600
+     bindsym 2 mode "default", resize set 1500 600
+     bindsym 3 mode "default", resize set 1200 1000
+
+     bindsym Return mode "default"
+     bindsym Escape mode "default"
+ }
+
+ for_window [window_role="pop-up"] floating enable
+ for_window [window_role="bubble"] floating enable
+ for_window [window_role="task_dialog"] floating enable
+ for_window [window_role="Preferences"] floating enable
+ for_window [window_type="dialog"] floating enable
+ for_window [window_type="menu"] floating enable
+
+
+ for_window [class="jive3-MainPanel"] floating enable #    , move position mouse
+ for_window [class="(?i)admin-Astor(?i)"] floating enable # , move position mouse
+ assign [class="jive3-MainPanel"] $ws1
+ assign [class="(?i)admin-Astor(?i)"] $ws1
+ # Move window to the next available workspace
+ bindsym $mod+Escape exec --no-startup-id ${HOME}/scripts/next-available-workspace.py
+ bindsym $mod+p move scratchpad
+ bindsym $mod+Shift+p scratchpad show
+
+
+
+ ##############################################################################
+ ## WORKSPACE
+ workspace_layout stacking
+ workspace_auto_back_and_forth no
+ force_display_urgency_hint 0 ms
+ focus_on_window_activation urgent
+ # back and forth
+ bindsym $mod+Tab workspace back_and_forth
+ bindsym $mod+Shift+Tab exec --no-startup-id ${HOME}/scripts/cycle-workspace.py
+ # Define names for default workspaces for which we configure key bindings later on.
+ # We use variables to avoid repeating the names in multiple places.
+ set $ws1  "1: Default"
+ set $ws2  "2: Vim"
+ set $ws3  "3: Term"
+ set $ws4  "4: Browser"
+ set $ws5  "5: 5"
+ set $ws6  "6: 6"
+ set $ws7  "7: 7"
+ set $ws8  "8: 8"
+ set $ws9  "9: 9"
+ set $ws10 "10: 0"
+
+
+ # Screens
+ workspace $ws1 output DP-3
+ workspace $ws2 output DP-4
+ workspace $ws3 output DP-5
+ workspace $ws4 output DP-6
+
+ # Assignment
+ assign [class="Firefox"] $ws4
+
+ # switch to workspace
+ bindsym $mod+1 workspace $ws1
+ bindsym $mod+2 workspace $ws2
+ bindsym $mod+3 workspace $ws3
+ bindsym $mod+4 workspace $ws4
+ bindsym $mod+5 workspace $ws5
+ bindsym $mod+6 workspace $ws6
+ bindsym $mod+7 workspace $ws7
+ bindsym $mod+8 workspace $ws8
+ bindsym $mod+9 workspace $ws9
+ bindsym $mod+0 workspace $ws10
+
+ # move focused container to workspace
+ bindsym $mod+Shift+1 move container to workspace $ws1
+ bindsym $mod+Shift+2 move container to workspace $ws2
+ bindsym $mod+Shift+3 move container to workspace $ws3
+ bindsym $mod+Shift+4 move container to workspace $ws4
+ bindsym $mod+Shift+5 move container to workspace $ws5
+ bindsym $mod+Shift+6 move container to workspace $ws6
+ bindsym $mod+Shift+7 move container to workspace $ws7
+ bindsym $mod+Shift+8 move container to workspace $ws8
+ bindsym $mod+Shift+9 move container to workspace $ws9
+ bindsym $mod+Shift+0 move container to workspace $ws10
+
+
+ ##############################################################################
+ ## MENU
+ bindsym $mod+d exec --no-startup-id rofi -show run
+ bindsym $mod+Shift+d exec --no-startup-id rofi -show drun
+ bindsym $mod+q exec --no-startup-id rofi -show ssh
+ bindsym $mod+z exec --no-startup-id rofi -show window
+
+
+
+ ##############################################################################
+ ## KEYS
+ # kill focused window
+ bindsym $mod+Shift+q kill
+
+
+ # change focus
+ bindsym $mod+j focus left
+ bindsym $mod+k focus down
+ bindsym $mod+l focus up
+ bindsym $mod+semicolon focus right
+
+ # alternatively, you can use the cursor keys:
+ bindsym $mod+Left focus left
+ bindsym $mod+Down focus down
+ bindsym $mod+Up focus up
+ bindsym $mod+Right focus right
+
+ # move focused window
+ bindsym $mod+Shift+j move left
+ bindsym $mod+Shift+k move down
+ bindsym $mod+Shift+l move up
+ bindsym $mod+Shift+semicolon move right
+
+ # alternatively, you can use the cursor keys:
+ bindsym $mod+Shift+Left move left
+ bindsym $mod+Shift+Down move down
+ bindsym $mod+Shift+Up move up
+ bindsym $mod+Shift+Right move right
+
+ # split in horizontal orientation
+ bindsym $mod+h split h
+
+ # split in vertical orientation
+ bindsym $mod+v split v
+
+ # enter fullscreen mode for the focused container
+ bindsym $mod+f fullscreen toggle
+
+ # change container layout (stacked, tabbed, toggle split)
+ bindsym $mod+s layout stacking
+ bindsym $mod+w layout tabbed
+ bindsym $mod+e layout toggle split
+
+ # toggle tiling / floating
+ bindsym $mod+Shift+space floating toggle
+
+ # change focus between tiling / floating windows
+ bindsym $mod+space focus mode_toggle
+
+ # focus the parent container
+ bindsym $mod+a focus parent
+
+ # focus the child container
+ bindsym $mod+Shift+a focus child
+ #bindsym $mod+d focus child
+
+ # reload the configuration file
+ bindsym $mod+Shift+c reload
+ # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+ bindsym $mod+Shift+r restart
+ # exit i3 (logs you out of your X session)
+ bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+
+
+ bindsym $mod+Shift+u exec "tac /home/antdup/.url_search | uniq -u | dmenu -p 'Surf ?' -l 10 | tee -a  .url_search | xargs -r surf "
+ bindsym $mod+u exec "tac /home/antdup/.url_search | uniq -u | dmenu -p 'Follow which url?' -l 10 | tee -a  .url_search | xargs -r firefox "
+
+ bindsym $mod+x exec --no-startup-id ${HOME}/scripts/passmenu --type
+
+ ##############################################################################
+ ## BAR
+
+ # Start i3bar to display a workspace bar (plus the system information i3status
+ # finds out, if available)
+ # bar {
+ #         status_command i3status -c $HOME/.config/i3/i3status
+ #         position top
+ #         tray_output  DP-3
+ #         # output  DP-6
+ # }
+  bar {
+  #    verbose yes
+      status_command i3blocks
+      i3bar_command i3bar -t
+      position top
+      font monaco:Regular, FontAwesome 8
+      strip_workspace_numbers yes
+      separator_symbol "■"
+      bindsym button4 nop
+      bindsym button5 nop
+        tray_output  DP-4
+      height $height
+      colors {
+          statusline         $white
+          background         $transparent
+          separator          $transparent
+
+  #                          BORDER       BACKGROUND   TEXT
+          focused_workspace  $transparent $transparent $white
+          inactive_workspace $transparent $transparent $darkwhite
+          active_workspace   $transparent $transparent $darkwhite
+          urgent_workspace   $darkred     $darkred     $transparent
+          binding_mode       $darkred     $darkred     $transparent
+      }
+  }
+
+
+ ##############################################################################
+ ## MODES
+ set $mode_power power
+ bindsym Mod1+Control+l mode "$mode_power"
+ mode "$mode_power" {
+     bindsym l mode "default", exec --no-startup-id $HOME/scripts/i3exit lock
+     bindsym e mode "default", exec --no-startup-id $HOME/scripts/i3exit logout
+     bindsym s mode "default", exec --no-startup-id $HOME/scripts/i3exit suspend
+     bindsym h mode "default", exec --no-startup-id $HOME/scripts/i3exit hibernate
+     bindsym r mode "default", exec --no-startup-id $HOME/scripts/i3exit reboot
+     bindsym p mode "default", exec --no-startup-id $HOME/scripts/i3exit shutdown
+
+     bindsym Return mode "default"
+     bindsym Escape mode "default"
+ }
+
+
+
+ ##############################################################################
+ ## STARTUP
+
+ # exec_always --no-startup-id feh --bg-fill $HOME/Pictures/ws_Arch_Linux_1920x1200.jpg
+ # exec_always --no-startup-id feh --bg-fill $HOME/Pictures/ws_Arch_Linux_1920x1200.jpg
+ exec_always --no-startup-id feh --bg-scale $HOME/Pictures/grey.jpg
+ # exec --no-startup-id compton -b
+ exec --no-startup-id nm-applet &
+ exec --no-startup-id parcellite -b
+ exec --no-startup-id dunst &
+ # Conky
+ exec --no-startup-id /bin/sh /home/antdup/scripts/start_conky_v.sh
+ exec --no-startup-id guake -e neomutt
+ exec --no-startup-id tilda -h
+ exec --no-startup-id python $HOME/scripts/log.py in >> /home/antdup/.login_logout
+ # Todo look at plasma applet
+ #
 

@@ -5,7 +5,8 @@ font = Monospace 9
 
 [colors]
 #background =  #101010
-background =  rgba(10, 10, 10, 0.5)
+# background =  rgba(10, 10, 10, 0.5)
+background =  rgba(22, 22, 22, 0.5)
 # background = #636363
 foreground =  #d0d0d0
 cursor              = #22ff22

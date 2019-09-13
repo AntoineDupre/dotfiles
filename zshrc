@@ -3,6 +3,7 @@
 export HOME=/home/antdup
 export ZSH=/home/antdup/.oh-my-zsh
 export EDITOR=nvim
+#export EDITOR=nvre
 
 # ------------------------------------------
 # Autojump
@@ -189,7 +190,8 @@ export WORKON_HOME=~/virt_env
 # source ~/.local/bin/virtualenvwrapper.sh
 source /usr/bin/virtualenvwrapper.sh
 
-function spaw_tmux() {
+# !-! spawn_tmux - Start a new tmux session or attach the latest one
+function spawn_tmux() {
 	tmux attach || tmux new
 }
 # export PATH="/home/antdup/miniconda3/bin:$PATH"
@@ -214,8 +216,8 @@ setxkbmap -option caps:escape
 # Aliases
 alias _ls='/bin/ls -F --color=auto'
 alias _ll='/bin/ls -lhF --color=auto'
-alias ll='exa -lga'
-alias ls='exa'
+alias ll='lsd -la'
+alias ls='lsd -1a'
 alias la='ls -lhaF --olor=auto'
 # alias e='exa'
 alias ee='exa -lg --git-ignore'
@@ -255,6 +257,11 @@ function e() {
    # nvr -c "NERDTree `pwd`"
 }
 
+# Powerline fonts
+powerline-daemon -q
+. /usr/lib/python3.7/site-packages/powerline/bindings/zsh/powerline.zsh
+
+
 # prompt toolkits envs
 alias pt_ptpython='workon ptpython;ptpython;deactivate'
 alias pt_mycli='workon mycli'
@@ -271,3 +278,163 @@ du -sh * |  sort -h
 # zstyle -e ':completion:*:(ssh|scp|sftp|rsh|rsync):hosts' hosts 'reply=(${=${${(f)"$(cat {/etc/ssh_,~/.ssh/known_}hosts(|2)(N) /dev/null)"}%%[# ]*}//,/ })'
 alias green="ssh w-v-ssh-green-0 -XY"
 alias blue="ssh w-v-ssh-blue-0 -XY"
+
+
+# Fzf
+#
+# !-! fh - History: repeat history
+fh() {
+  print -z $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed -r 's/ *[0-9]*\*? *//' | sed -r 's/\\/\\\\/g')
+}
+
+# !-! da - Docker: start
+function da() {
+  local cid
+  cid=$(docker ps -a | sed 1d | fzf -1 -q "$1" | awk '{print $1}')
+
+  [ -n "$cid" ] && docker start "$cid" && docker attach "$cid"
+}
+
+# !-! dpull - Docker: pull from maxiv
+function dpull() {
+  local cid
+  cid=$(python /home/antdup/scripts/docker_list.py | fzf -1 -q "$1" | awk '{print $1}')
+
+  [ -n "$cid" ] && docker pull  docker.maxiv.lu.se/"$cid"
+}
+
+# !-! drun - Docker: run from maxiv
+function drun() {
+  local cid
+  cid=$(python /home/antdup/scripts/docker_list.py | fzf -1 -q "$1" | awk '{print $1}')
+
+  [ -n "$cid" ] && docker run -it  docker.maxiv.lu.se/"$cid"
+}
+
+# Process
+# !-! fkill - Kill processes
+fkill() {
+    local pid
+    if [ "$UID" != "0" ]; then
+        pid=$(ps -f -u $UID | sed 1d | fzf -m | awk '{print $2}')
+    else
+        pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
+    fi
+
+    if [ "x$pid" != "x" ]
+    then
+        echo $pid | xargs kill -${1:-9}
+    fi
+}
+
+
+
+# Git
+# !-! fbr - Git: checkout git branch (including remote branches)
+fbr() {
+  local branches branch
+  branches=$(git branch --all | grep -v HEAD) &&
+  branch=$(echo "$branches" |
+           fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
+  git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
+}
+
+# !-! fcoc - Git: checkout git commit
+fcoc() {
+  local commits commit
+  commits=$(git log --pretty=oneline --abbrev-commit --reverse) &&
+  commit=$(echo "$commits" | fzf --tac +s +m -e) &&
+  git checkout $(echo "$commit" | sed "s/ .*//")
+}
+
+# !-! fshow - Git commit browser
+fshow() {
+  git log --graph --color=always \
+      --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
+  fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
+      --bind "ctrl-m:execute:
+                (grep -o '[a-f0-9]\{7\}' | head -1 |
+                xargs -I % sh -c 'git show --color=always % | less -R') << 'FZF-EOF'
+                {}
+FZF-EOF"
+}
+
+is_in_git_repo() {
+  git rev-parse HEAD > /dev/null 2>&1
+}
+
+
+# !-! fgst - Git pick files from `git status -s`
+fgst() {
+  # "Nothing to see here, move along"
+  is_in_git_repo || return
+
+  local cmd="${FZF_CTRL_T_COMMAND:-"command git status -s"}"
+
+  eval "$cmd" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse $FZF_DEFAULT_OPTS $FZF_CTRL_T_OPTS" fzf -m "$@" | while read -r item; do
+    echo "$item" | awk '{print $2}'
+  done
+  echo
+}
+
+
+# Tmux fzf
+#
+# !-! tm - Tmux: start
+tm() {
+  [[ -n "$TMUX" ]] && change="switch-client" || change="attach-session"
+  if [ $1 ]; then
+    tmux $change -t "$1" 2>/dev/null || (tmux new-session -d -s $1 && tmux $change -t "$1"); return
+  fi
+  session=$(tmux list-sessions -F "#{session_name}" 2>/dev/null | fzf --exit-0) &&  tmux $change -t "$session" || echo "No sessions found."
+}
+
+# !-! fs - Tmux; list sessions
+fs() {
+  local session
+  session=$(tmux list-sessions -F "#{session_name}" | \
+    fzf --query="$1" --select-1 --exit-0) &&
+  tmux switch-client -t "$session"
+}
+
+# ftpane - Tmux: switch pane
+ftpane() {
+  local panes current_window current_pane target target_window target_pane
+  panes=$(tmux list-panes -s -F '#I:#P - #{pane_current_path} #{pane_current_command}')
+  current_pane=$(tmux display-message -p '#I:#P')
+  current_window=$(tmux display-message -p '#I')
+
+  target=$(echo "$panes" | grep -v "$current_pane" | fzf +m --reverse) || return
+
+  target_window=$(echo $target | awk 'BEGIN{FS=":|-"} {print$1}')
+  target_pane=$(echo $target | awk 'BEGIN{FS=":|-"} {print$2}' | cut -c 1)
+
+  if [[ $current_window -eq $target_window ]]; then
+    tmux select-pane -t ${target_window}.${target_pane}
+  else
+    tmux select-pane -t ${target_window}.${target_pane} &&
+    tmux select-window -t $target_window
+  fi
+}
+
+# !-! j - Jump: autojump
+j() {
+    if [[ "$#" -ne 0 ]]; then
+        cd $(autojump $@)
+        return
+    fi
+    cd "$(autojump -s | sort -k1gr | awk '$1 ~ /[0-9]:/ && $2 ~ /^\// { for (i=2; i<=NF; i++) { print $(i) } }' |  fzf --height 40% --reverse --inline-info)"
+    }
+
+# In tmux.conf
+# bind-key 0 run "tmux split-window -l 12 'bash -ci ftpane'"
+
+# cd history
+#  from https://github.com/changyuheng/zsh-interactive-cd
+#
+source $HOME/zsh-interactive-cd.plugin.zsh
+
+# List all the custum fuction
+function x() {
+    python /home/antdup/scripts/list_command.py | fzf | python /home/antdup/scripts/split_command.py | xdotool type --clearmodifiers --file -
+}

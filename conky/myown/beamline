@@ -1,0 +1,95 @@
+###Settings###
+background yes
+cpu_avg_samples 10
+default_bar_size 200 10
+default_graph_size 200 100
+diskio_avg_samples 10
+double_buffer yes
+extra_newline no
+if_up_strictness address
+net_avg_samples 10
+no_buffers yes
+temperature_unit celsius
+text_buffer_size 2048
+short_units yes
+update_interval 1
+###End Settings###
+
+###Position###
+alignment top_left
+gap_x 1250
+gap_y 150
+minimum_size 270 280
+maximum_width 270
+###End Position###
+
+###Borders###
+border_inner_margin 0
+border_outer_margin 10
+border_width 0
+draw_borders no
+draw_graph_borders yes
+draw_outline no
+draw_shades no
+###End Borders###
+
+###Window###
+own_window yes
+own_window_argb_visual no
+own_window_argb_value 102
+own_window_class systemConky
+own_window_colour 000000
+own_window_hints undecorate,sticky,skip_taskbar,skip_pager,below
+#all options for own_window_type are normal, desktop, dock, panel or override
+#best for Linux Mint 17.1 Cinnamon
+own_window_type override
+#best for Ubuntu 14.10 Utopic
+#own_window_type normal
+own_window_transparent yes
+own_window_title system_conky
+###End Window###
+
+###Font###
+max_text_width 0
+override_utf8_locale yes
+uppercase no
+use_spacer none
+use_xft yes
+xftfont ubuntu:size=12
+xftalpha 0.9
+###End Font###
+
+###Defining Colors###
+default_color FFFFFF
+default_outline_color 000000
+default_shade_color 000000
+##Shades of Gray#
+#color1 DDDDDD
+#color2 AAAAAA
+#color3 888888
+##Orange#
+#color4 EF5A29
+##Green#
+#color5 77B753
+##Light Orange#
+#color6 FFA300
+####End Color###
+#
+
+# color5  F0544C
+color5  707070
+color1  F0544C
+color2  00ff00
+color3  ffa500
+color4  ff1111
+# color5 77B753
+font Ubuntu:size=11
+
+
+
+
+TEXT
+${voffset 42}#
+$color5${font ubuntu:size=14}Beamlines load $font ${hr 1}$color
+${execi 10 python ~/scripts/beamline_load.py}
+

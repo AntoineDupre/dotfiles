@@ -1,0 +1,52 @@
+separator=false
+separator_block_width=5
+border_top=0
+border_left=0
+border_right=0
+border_bottom=2
+
+
+[vpn]
+command= $HOME/scripts/nordvpn_status.py
+interval=2
+border=#98971a
+
+
+[docker]
+command=$HOME/scripts/docker
+color=#0db7ed
+interval=10
+
+
+
+[sound]
+command= $HOME/scripts/volume_control.py i3blocks
+interval=1
+markup=powerline
+border=#cc241d
+separator_block_width=10
+
+
+
+[date]
+command=echo "`date +'%A %d %B'`"
+interval=150
+markup=pango
+border=#458588
+separator_block_width=10
+
+
+
+
+
+
+[time]
+command=echo "`date +'%T'`"
+interval=1
+markup=pango
+border=#928374
+separator_block_width=40
+
+
+
+
